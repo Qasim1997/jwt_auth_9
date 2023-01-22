@@ -22,17 +22,35 @@ class UserResetPassword extends Controller
             'email' => 'required|email',
         ]);
         $email = $request->email;
+
         // Check User's Email Exists or Not
         $user = User::where('email', $email)->first();
         if (!$user) {
             return response([
-                'message' => "Email doesn't exists",
+                'message' => 'Email doesnt exists',
                 'status' => 'failed'
             ], 404);
-        } else {
+        }
+        else{
             dispatch(new \App\Jobs\ResetEmail($email));
+
         }
 
+        //     // Generate Token
+        //     $token = Str::random(60);
+
+        //     // Saving Data to Password Reset Table
+        //     UserPasswordRest::create([
+        //         'email'=>$email,
+        //         'token'=>$token,
+        //         'created_at'=>Carbon::now()
+        //     ]);
+
+        //     // Sending EMail with Password Reset View
+        //    Mail::send('adminreset', ['token'=>$token], function(Message $message)use($email){
+        //         $message->subject('Reset Your Password');
+        //         $message->to($email);
+        //     });
         return response([
             'message' => 'Password Reset Email Sent... Check Your Email',
             'status' => 'success',

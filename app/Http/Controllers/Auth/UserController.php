@@ -53,9 +53,8 @@ class UserController extends Controller
 
         $token = Auth::attempt($credentials);
         if (!$token) {
-            return response()->json(['result' => 'wrong email or password.'], 424);
+            return response()->json(['result' => 'wrong email or password.'], 401);
         }
-
         $user = Auth::user();
         return response()->json([
             'access_token' => $token,
@@ -63,7 +62,7 @@ class UserController extends Controller
             'message' =>  'Login Successfully',
             'data' => $user
             // 'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
+        ],200);
 
     }
     public function me()
